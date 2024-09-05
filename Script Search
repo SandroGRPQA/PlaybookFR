@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Conhecimento GURU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Product+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .quintopedia {
+            font-family: 'Product Sans', sans-serif;
+            font-size: 36px;
+            color: #3957bd;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .search-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 80%;
+            max-width: 584px;
+        }
+        #search-input {
+            width: 100%;
+            padding: 10px 40px 10px 40px;
+            font-size: 16px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            outline: none;
+            transition: box-shadow 0.3s;
+        }
+        #search-input:hover,
+        #search-input:focus {
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
+            border-color: rgba(223,225,229,0);
+        }
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9aa0a6;
+        }
+        .clear-search {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bdc1c6;
+            cursor: pointer;
+            display: none;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .clear-search:hover {
+            opacity: 1;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 6px 20px rgba(0,0,0,0.05);
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+            display: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.10);
+        }
+        .card-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .check-circle {
+            width: 20px;
+            height: 20px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+        .check-mark {
+            color: white;
+            font-size: 12px;
+            line-height: 1;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .card-content {
+            color: #666;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-tags {
+            color: #007bff;
+            font-size: 9.8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+        }
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .tag img {
+            width: 8.4px;
+            height: 8.4px;
+            margin-right: 3px;
+        }
+        .card-footer {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .card-footer img {
+            height: 12px;
+            width: auto;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+        }
+        .popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup.active .popup-content {
+            transform: scale(1);
+        }
+        .close-popup {
+            float: right;
+            cursor: pointer;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <h1 class="quintopedia">Quintopédia</h1>
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="search-input" placeholder="Digite sua pesquisa...">
+            <i class="fas fa-times clear-search" id="clear-search"></i>
+        </div>
+    </div>
+    <div class="card-container" id="card-container">
+        <!-- Cards serão inseridos aqui dinamicamente -->
+    </div>
+    <footer>QuintoAndar</footer>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            <div id="popup-title" class="card-title"></div>
+            <div id="popup-content" class="card-content"></div>
+            <div id="popup-tags" class="card-tags"></div>
+        </div>
+    </div>
+
+    <script>
+        const cards = [
+            {
+                title: "Como Melhorar sua Produtividade no Trabalho",
+                content: "Aumentar a produtividade no trabalho é essencial para alcançar seus objetivos e manter um equilíbrio saudável entre vida profissional e pessoal. Comece criando uma lista de tarefas diárias e estabeleça prioridades. Utilize técnicas como o Método Pomodoro, que consiste em trabalhar por 25 minutos e fazer uma pausa de 5 minutos.",
+                tags: ["produtividade", "trabalho", "gestaodetempo", "MétodoPomodoro", "equilíbrio"]
+            },
+            {
+                title: "Os Benefícios da Meditação para a Saúde Mental",
+                content: "A meditação tem ganhado popularidade como uma prática eficaz para melhorar a saúde mental. Estudos mostram que a meditação pode reduzir o estresse e a ansiedade, melhorar a concentração e aumentar a sensação de bem-estar geral. Dedicar apenas alguns minutos por dia à meditação pode ter um impacto positivo significativo na sua saúde mental.",
+                tags: ["meditação", "saúdemental", "estresse", "mindfulness", "bemestar"]
+            },
+            {
+                title: "Como Economizar Dinheiro com Planejamento Financeiro",
+                content: "O planejamento financeiro é fundamental para economizar dinheiro e alcançar a estabilidade financeira. Comece analisando seus gastos mensais e criando um orçamento detalhado. Identifique áreas onde você pode reduzir despesas, como lazer ou alimentação fora de casa.",
+                tags: ["planejamentofinanceiro", "economia", "orçamento", "finançaspessoais", "investimentos"]
+            },
+            {
+                title: "Dicas para Manter uma Dieta Equilibrada",
+                content: "Manter uma dieta equilibrada é crucial para a saúde e o bem-estar geral. Inclua uma variedade de alimentos em sua dieta, como frutas, vegetais, grãos integrais e proteínas magras. Evite alimentos processados e ricos em açúcares e gorduras saturadas.",
+                tags: ["dieta", "saúde", "alimentação", "nutrição", "exercícios"]
+            },
+            {
+                title: "A Importância do Sono para a Saúde Geral",
+                content: "Um sono de qualidade é fundamental para manter a saúde física e mental. Durante o sono, o corpo realiza funções vitais como a recuperação muscular e a regulação hormonal. A falta de sono pode levar a problemas de saúde, como hipertensão e diabetes, além de afetar a concentração e o humor.",
+                tags: ["sono", "saúde", "qualidadedesono", "dormirbem", "bemestar"]
+            },
+            {
+                title: "Como Desenvolver Habilidades de Comunicação Eficazes",
+                content: "Desenvolver habilidades de comunicação eficazes é crucial para o sucesso profissional e pessoal. A comunicação clara e assertiva ajuda a evitar mal-entendidos e fortalece relacionamentos. Comece praticando a escuta ativa, prestando atenção total ao interlocutor e demonstrando interesse genuíno.",
+                tags: ["comunicação", "habilidades", "escutaativa", "assertividade", "feedback"]
+            },
+            {
+                title: "Benefícios da Prática de Atividades Físicas Regulares",
+                content: "A prática regular de atividades físicas oferece inúmeros benefícios para a saúde física e mental. Exercícios como caminhada, corrida e musculação ajudam a melhorar a circulação sanguínea, fortalecer o sistema cardiovascular e aumentar a resistência muscular.",
+                tags: ["atividadefísica", "saúde", "exercícios", "bemestar", "qualidadedevida"]
+            },
+            {
+                title: "Como Gerenciar o Estresse no Dia a Dia",
+                content: "Gerenciar o estresse é essencial para manter a saúde mental e a qualidade de vida. Identificar as fontes de estresse em sua vida é o primeiro passo para lidar com elas de maneira eficaz. Práticas como a meditação, a respiração profunda e a prática regular de exercícios físicos podem ajudar a reduzir os níveis de estresse.",
+                tags: ["estresse", "gestão", "saúdemental", "meditação", "qualidadedevida"]
+            },
+            {
+                title: "Os Impactos da Tecnologia na Vida Cotidiana",
+                content: "A tecnologia tem um impacto profundo na vida cotidiana, influenciando desde a forma como trabalhamos até como nos comunicamos. Ferramentas digitais como smartphones e computadores facilitam o acesso à informação e a comunicação instantânea.",
+                tags: ["tecnologia", "vida cotidiana", "impactos", "privacidade", "segurança"]
+            },
+            {
+                title: "Como Construir e Manter Relacionamentos Saudáveis",
+                content: "Construir e manter relacionamentos saudáveis é fundamental para o bem-estar emocional e social. A base de um relacionamento saudável é a comunicação aberta e honesta. Respeite os sentimentos e opiniões do outro e procure entender suas perspectivas.",
+                tags: ["relacionamentos", "comunicação", "confiança", "apoio", "resolução de conflitos"]
+            },
+            {
+                title: "A Importância da Educação Continuada na Carreira",
+                content: "A educação continuada é crucial para o desenvolvimento profissional e o avanço na carreira. Com o rápido avanço das tecnologias e mudanças no mercado de trabalho, é fundamental estar atualizado com as novas tendências e habilidades.",
+                tags: ["educação", "carreira", "desenvolvimentoprofissional", "aprendizado", "capacitação"]
+            }
+        ];
+
+        const cardContainer = document.getElementById('card-container');
+        const searchInput = document.getElementById('search-input');
+        const clearSearch = document.getElementById('clear-search');
+        const popup = document.getElementById('popup');
+        const popupTitle = document.getElementById('popup-title');
+        const popupContent = document.getElementById('popup-content');
+        const popupTags = document.getElementById('popup-tags');
+
+        function createCard(card) {
+            const cardElement = document.createElement('div');
+            cardElement.className = 'card';
+            cardElement.innerHTML = `
+                <div class="card-title">
+                    <div class="check-circle">
+                        <span class="check-mark">&#10003;</span>
+                    </div>
+                    ${card.title}
+                </div>
+                <div class="card-content">${card.content}</div>
+                <div class="card-tags">
+                    ${card.tags.map(tag => `
+                        <span class="tag">
+                            <img src="https://cdn-icons-png.flaticon.com/128/16/16260.png" alt="tag icon">
+                            ${tag}
+                        </span>
+                    `).join('')}
+                </div>
+                <div class="card-footer">
+                    <img src="https://conteudos.quintoandar.com.br/wp-content/themes/conteudos-quinto-andar-v2/dist/images/newid/quintoandar-logo-newid.svg" alt="QuintoAndar Logo">
+                </div>
+            `;
+
+            cardElement.addEventListener('click', () => openPopup(card));
+
+            return cardElement;
+        }
+
+        function renderCards(searchTerm) {
+            cardContainer.innerHTML = '';
+            if (searchTerm.trim() === '') {
+                return; // Don't render any cards if search input is empty
+            }
+            cards.forEach(card => {
+                if (card.title.toLowerCase().includes(searchTerm) ||
+                    card.content.toLowerCase().includes(searchTerm) ||
+                    card.tags.some(tag => tag.toLowerCase().includes(searchTerm))) {
+                    const cardElement = createCard(card);
+                    cardContainer.appendChild(cardElement);
+                    cardElement.style.display = 'block';
+                }
+            });
+        }
+
+        function openPopup(card) {
+            popupTitle.innerHTML = `
+                <div class="check-circle">
+                    <span class="check-mark">&#10003;</span>
+                </div>
+                ${card.title}
+            `;
+            popupContent.textContent = card.content;
+            popupTags.innerHTML = card.tags.map(tag => `
+                <span class="tag">
+                    <img src="https://cdn-icons-png.flaticon.com/128/16/16260.png" alt="tag icon">
+                    ${tag}
+                </span>
+            `).join('');
+            popup.classList.add('active');
+        }
+
+        function closePopup() {
+            popup.classList.remove('active');
+        }
+
+        function toggleClearButton() {
+            if (searchInput.value) {
+                clearSearch.style.display = 'block';
+                setTimeout(() => clearSearch.style.opacity = '0.7', 0);
+            } else {
+                clearSearch.style.opacity = '0';
+                setTimeout(() => clearSearch.style.display = 'none', 300);
+            }
+        }
+
+        function clearSearchInput() {
+            searchInput.value = '';
+            toggleClearButton();
+            renderCards('');
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            renderCards(searchTerm);
+            toggleClearButton();
+        });
+
+        clearSearch.addEventListener('click', clearSearchInput);
+    </script>
+</body>
+</html>
