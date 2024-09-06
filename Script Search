@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base de Conhecimento GURU</title>
+    <!-- Importação de fontes e ícones -->
     <link href="https://fonts.googleapis.com/css2?family=Product+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
+        /* Estilos gerais do corpo da página */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f0f0f0;
         }
+
+        /* Estilos do container de pesquisa */
         .search-container {
             text-align: center;
             margin-bottom: 20px;
         }
+
+        /* Estilo do título "Quintopédia" */
         .quintopedia {
             font-family: 'Product Sans', sans-serif;
             font-size: 36px;
@@ -24,12 +30,16 @@
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
+
+        /* Estilos do wrapper da barra de pesquisa */
         .search-wrapper {
             position: relative;
             display: inline-block;
             width: 80%;
             max-width: 584px;
         }
+
+        /* Estilos da barra de pesquisa */
         #search-input {
             width: 100%;
             padding: 10px 40px 10px 40px;
@@ -39,11 +49,15 @@
             outline: none;
             transition: box-shadow 0.3s;
         }
+
+        /* Efeitos de hover e foco na barra de pesquisa */
         #search-input:hover,
         #search-input:focus {
             box-shadow: 0 1px 6px rgba(32,33,36,.28);
             border-color: rgba(223,225,229,0);
         }
+
+        /* Ícone de pesquisa */
         .search-icon {
             position: absolute;
             left: 12px;
@@ -51,6 +65,8 @@
             transform: translateY(-50%);
             color: #9aa0a6;
         }
+
+        /* Botão de limpar pesquisa */
         .clear-search {
             position: absolute;
             right: 12px;
@@ -62,14 +78,20 @@
             opacity: 0.7;
             transition: opacity 0.3s ease;
         }
+
+        /* Efeito hover no botão de limpar */
         .clear-search:hover {
             opacity: 1;
         }
+
+        /* Container dos cards */
         .card-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
         }
+
+        /* Estilos dos cards */
         .card {
             background-color: white;
             border-radius: 8px;
@@ -83,10 +105,14 @@
             text-decoration: none;
             color: inherit;
         }
+
+        /* Efeito hover nos cards */
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.10);
         }
+
+        /* Título do card */
         .card-title {
             font-weight: bold;
             font-size: 18px;
@@ -94,6 +120,8 @@
             display: flex;
             align-items: center;
         }
+
+        /* Círculo de verificação no título do card */
         .check-circle {
             width: 20px;
             height: 20px;
@@ -106,12 +134,16 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             flex-shrink: 0;
         }
+
+        /* Marca de verificação dentro do círculo */
         .check-mark {
             color: white;
             font-size: 12px;
             line-height: 1;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
+
+        /* Conteúdo do card */
         .card-content {
             color: #666;
             margin-bottom: 10px;
@@ -121,6 +153,8 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        /* Tags do card */
         .card-tags {
             color: #007bff;
             font-size: 9.8px;
@@ -130,24 +164,34 @@
             display: flex;
             align-items: center;
         }
+
+        /* Estilo individual das tags */
         .tag {
             display: inline-flex;
             align-items: center;
             margin-right: 10px;
         }
+
+        /* Ícone das tags */
         .tag img {
             width: 8.4px;
             height: 8.4px;
             margin-right: 3px;
         }
+
+        /* Rodapé do card */
         .card-footer {
             text-align: center;
             margin-top: 10px;
         }
+
+        /* Logo no rodapé do card */
         .card-footer img {
             height: 12px;
             width: auto;
         }
+
+        /* Rodapé da página */
         footer {
             text-align: center;
             margin-top: 20px;
@@ -156,6 +200,7 @@
     </style>
 </head>
 <body>
+    <!-- Container de pesquisa -->
     <div class="search-container">
         <h1 class="quintopedia">Quintopédia</h1>
         <div class="search-wrapper">
@@ -164,12 +209,15 @@
             <i class="fas fa-times clear-search" id="clear-search"></i>
         </div>
     </div>
+    <!-- Container dos cards -->
     <div class="card-container" id="card-container">
         <!-- Cards serão inseridos aqui dinamicamente -->
     </div>
+    <!-- Rodapé da página -->
     <footer>QuintoAndar</footer>
 
     <script>
+        // Array de objetos com os dados dos cards
         const cards = [
             {
                 title: "Fluxo de despublicação de imóveis",
@@ -178,10 +226,12 @@
             },
         ];
 
+        // Seleção de elementos do DOM
         const cardContainer = document.getElementById('card-container');
         const searchInput = document.getElementById('search-input');
         const clearSearch = document.getElementById('clear-search');
 
+        // Função para criar um card
         function createCard(card) {
             const cardElement = document.createElement('a');
             cardElement.className = 'card';
@@ -211,6 +261,7 @@
             return cardElement;
         }
 
+        // Função para renderizar os cards com base na pesquisa
         function renderCards(searchTerm) {
             cardContainer.innerHTML = '';
             if (searchTerm.trim() === '') {
@@ -227,6 +278,7 @@
             });
         }
 
+        // Função para mostrar/esconder o botão de limpar pesquisa
         function toggleClearButton() {
             if (searchInput.value) {
                 clearSearch.style.display = 'block';
@@ -237,18 +289,21 @@
             }
         }
 
+        // Função para limpar o campo de pesquisa
         function clearSearchInput() {
             searchInput.value = '';
             toggleClearButton();
             renderCards('');
         }
 
+        // Event listener para o campo de pesquisa
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             renderCards(searchTerm);
             toggleClearButton();
         });
 
+        // Event listener para o botão de limpar pesquisa
         clearSearch.addEventListener('click', clearSearchInput);
     </script>
 </body>
