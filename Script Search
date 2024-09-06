@@ -80,6 +80,8 @@
             display: none;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
         .card:hover {
             transform: translateY(-5px);
@@ -151,42 +153,6 @@
             margin-top: 20px;
             color: #666;
         }
-        .popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .popup-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 80%;
-            max-height: 80%;
-            overflow-y: auto;
-            transform: scale(0.7);
-            transition: transform 0.3s ease;
-        }
-        .popup.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .popup.active .popup-content {
-            transform: scale(1);
-        }
-        .close-popup {
-            float: right;
-            cursor: pointer;
-            font-size: 24px;
-        }
     </style>
 </head>
 <body>
@@ -203,85 +169,24 @@
     </div>
     <footer>QuintoAndar</footer>
 
-    <div class="popup" id="popup">
-        <div class="popup-content">
-            <span class="close-popup" onclick="closePopup()">&times;</span>
-            <div id="popup-title" class="card-title"></div>
-            <div id="popup-content" class="card-content"></div>
-            <div id="popup-tags" class="card-tags"></div>
-        </div>
-    </div>
-
     <script>
         const cards = [
             {
-                title: "Como Melhorar sua Produtividade no Trabalho",
-                content: "Aumentar a produtividade no trabalho é essencial para alcançar seus objetivos e manter um equilíbrio saudável entre vida profissional e pessoal. Comece criando uma lista de tarefas diárias e estabeleça prioridades. Utilize técnicas como o Método Pomodoro, que consiste em trabalhar por 25 minutos e fazer uma pausa de 5 minutos.",
-                tags: ["produtividade", "trabalho", "gestaodetempo", "MétodoPomodoro", "equilíbrio"]
+                title: "Fluxo de despublicação de imóveis",
+                content: "Em algumas situações, podemos receber relatos de corretores sobre imóveis que não atendem aos padrões de locação do QuintoAndar ou existe algum outro fator que necessita uma atenção especial. Nesses casos, é fundamental compreender quais critérios devem ser avaliados antes de solicitar a despublicação do imóvel.",
+                tags: ["Despublicacaodeimoveis", "Despublicação", "Imóvelforadopadrão", "Suspender", "Suspenderanúncio"]
             },
-            {
-                title: "Os Benefícios da Meditação para a Saúde Mental",
-                content: "A meditação tem ganhado popularidade como uma prática eficaz para melhorar a saúde mental. Estudos mostram que a meditação pode reduzir o estresse e a ansiedade, melhorar a concentração e aumentar a sensação de bem-estar geral. Dedicar apenas alguns minutos por dia à meditação pode ter um impacto positivo significativo na sua saúde mental.",
-                tags: ["meditação", "saúdemental", "estresse", "mindfulness", "bemestar"]
-            },
-            {
-                title: "Como Economizar Dinheiro com Planejamento Financeiro",
-                content: "O planejamento financeiro é fundamental para economizar dinheiro e alcançar a estabilidade financeira. Comece analisando seus gastos mensais e criando um orçamento detalhado. Identifique áreas onde você pode reduzir despesas, como lazer ou alimentação fora de casa.",
-                tags: ["planejamentofinanceiro", "economia", "orçamento", "finançaspessoais", "investimentos"]
-            },
-            {
-                title: "Dicas para Manter uma Dieta Equilibrada",
-                content: "Manter uma dieta equilibrada é crucial para a saúde e o bem-estar geral. Inclua uma variedade de alimentos em sua dieta, como frutas, vegetais, grãos integrais e proteínas magras. Evite alimentos processados e ricos em açúcares e gorduras saturadas.",
-                tags: ["dieta", "saúde", "alimentação", "nutrição", "exercícios"]
-            },
-            {
-                title: "A Importância do Sono para a Saúde Geral",
-                content: "Um sono de qualidade é fundamental para manter a saúde física e mental. Durante o sono, o corpo realiza funções vitais como a recuperação muscular e a regulação hormonal. A falta de sono pode levar a problemas de saúde, como hipertensão e diabetes, além de afetar a concentração e o humor.",
-                tags: ["sono", "saúde", "qualidadedesono", "dormirbem", "bemestar"]
-            },
-            {
-                title: "Como Desenvolver Habilidades de Comunicação Eficazes",
-                content: "Desenvolver habilidades de comunicação eficazes é crucial para o sucesso profissional e pessoal. A comunicação clara e assertiva ajuda a evitar mal-entendidos e fortalece relacionamentos. Comece praticando a escuta ativa, prestando atenção total ao interlocutor e demonstrando interesse genuíno.",
-                tags: ["comunicação", "habilidades", "escutaativa", "assertividade", "feedback"]
-            },
-            {
-                title: "Benefícios da Prática de Atividades Físicas Regulares",
-                content: "A prática regular de atividades físicas oferece inúmeros benefícios para a saúde física e mental. Exercícios como caminhada, corrida e musculação ajudam a melhorar a circulação sanguínea, fortalecer o sistema cardiovascular e aumentar a resistência muscular.",
-                tags: ["atividadefísica", "saúde", "exercícios", "bemestar", "qualidadedevida"]
-            },
-            {
-                title: "Como Gerenciar o Estresse no Dia a Dia",
-                content: "Gerenciar o estresse é essencial para manter a saúde mental e a qualidade de vida. Identificar as fontes de estresse em sua vida é o primeiro passo para lidar com elas de maneira eficaz. Práticas como a meditação, a respiração profunda e a prática regular de exercícios físicos podem ajudar a reduzir os níveis de estresse.",
-                tags: ["estresse", "gestão", "saúdemental", "meditação", "qualidadedevida"]
-            },
-            {
-                title: "Os Impactos da Tecnologia na Vida Cotidiana",
-                content: "A tecnologia tem um impacto profundo na vida cotidiana, influenciando desde a forma como trabalhamos até como nos comunicamos. Ferramentas digitais como smartphones e computadores facilitam o acesso à informação e a comunicação instantânea.",
-                tags: ["tecnologia", "vida cotidiana", "impactos", "privacidade", "segurança"]
-            },
-            {
-                title: "Como Construir e Manter Relacionamentos Saudáveis",
-                content: "Construir e manter relacionamentos saudáveis é fundamental para o bem-estar emocional e social. A base de um relacionamento saudável é a comunicação aberta e honesta. Respeite os sentimentos e opiniões do outro e procure entender suas perspectivas.",
-                tags: ["relacionamentos", "comunicação", "confiança", "apoio", "resolução de conflitos"]
-            },
-            {
-                title: "A Importância da Educação Continuada na Carreira",
-                content: "A educação continuada é crucial para o desenvolvimento profissional e o avanço na carreira. Com o rápido avanço das tecnologias e mudanças no mercado de trabalho, é fundamental estar atualizado com as novas tendências e habilidades.",
-                tags: ["educação", "carreira", "desenvolvimentoprofissional", "aprendizado", "capacitação"]
-            }
         ];
 
         const cardContainer = document.getElementById('card-container');
         const searchInput = document.getElementById('search-input');
         const clearSearch = document.getElementById('clear-search');
-        const popup = document.getElementById('popup');
-        const popupTitle = document.getElementById('popup-title');
-        const popupContent = document.getElementById('popup-content');
-        const popupTags = document.getElementById('popup-tags');
 
         function createCard(card) {
-            const cardElement = document.createElement('div');
+            const cardElement = document.createElement('a');
             cardElement.className = 'card';
+            cardElement.href = 'https://sites.google.com/quintoandar.com.br/playbookfr/biblioteca/fluxo-de-despublica%C3%A7%C3%A3o-de-im%C3%B3veis';
+            cardElement.target = '_blank';
             cardElement.innerHTML = `
                 <div class="card-title">
                     <div class="check-circle">
@@ -303,15 +208,13 @@
                 </div>
             `;
 
-            cardElement.addEventListener('click', () => openPopup(card));
-
             return cardElement;
         }
 
         function renderCards(searchTerm) {
             cardContainer.innerHTML = '';
             if (searchTerm.trim() === '') {
-                return; // Don't render any cards if search input is empty
+                return; // Não renderiza nenhum card se a busca estiver vazia
             }
             cards.forEach(card => {
                 if (card.title.toLowerCase().includes(searchTerm) ||
@@ -322,27 +225,6 @@
                     cardElement.style.display = 'block';
                 }
             });
-        }
-
-        function openPopup(card) {
-            popupTitle.innerHTML = `
-                <div class="check-circle">
-                    <span class="check-mark">&#10003;</span>
-                </div>
-                ${card.title}
-            `;
-            popupContent.textContent = card.content;
-            popupTags.innerHTML = card.tags.map(tag => `
-                <span class="tag">
-                    <img src="https://cdn-icons-png.flaticon.com/128/16/16260.png" alt="tag icon">
-                    ${tag}
-                </span>
-            `).join('');
-            popup.classList.add('active');
-        }
-
-        function closePopup() {
-            popup.classList.remove('active');
         }
 
         function toggleClearButton() {
